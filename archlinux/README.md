@@ -7,7 +7,17 @@ To test this solution, three system needs to be setup.
 | Kclient | Will be used a client machine |
 | KSSH | This will be running SSH service and shows an example how services authnticate using Kerberos |
 
-`kdc` folder of this repo contains the Kerberos server setup scripts.
+`JAI.NET` is the default realm. `kdc`, `kssh` and `kclient` folders of this repo contains respective container code.
+
+
+## Pre-requisites
+
+As we are running 3 container and they have to communicate with each other, we need to create a common network. This will resolve our DNS rsolutions.  
+
+> Create network if not already present.
+```bash
+docker network create krb5
+```
 
 ## KDC setup
 Build the image.
@@ -15,8 +25,6 @@ Build the image.
 cd /mnt/c/DevBox/kerberos/archlinux/kdc
 docker buildx build -t kdc:v1 .
 ```
-
-> As we are running 3 container and they have to communicate with each other, we need to create a common network.  
 
 Run the container.
 ```bash
@@ -36,8 +44,6 @@ cd /mnt/c/DevBox/kerberos/archlinux/kssh
 docker buildx build -t kssh:v1 .
 ```
 
-> As we are running 3 container and they have to communicate with each other, we need to create a common network.  
-
 Run the container.
 ```bash
 docker run -dit --net=krb5 --name kssh --hostname kssh.jai.net kssh:v1 /bin/bash
@@ -56,8 +62,6 @@ Build the image.
 cd /mnt/c/DevBox/kerberos/archlinux/kclient
 docker buildx build -t kclient:v1 .
 ```
-
-> As we are running 3 container and they have to communicate with each other, we need to create a common network.  
 
 Run the container.
 ```bash
@@ -141,7 +145,7 @@ EOL
 ```
 
 
-To be safer side you can add all ips to all containers
+To be safer side you can add all IP's to all containers.
 
 ```bash
 cat >> /etc/hosts <<EOL
