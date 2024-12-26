@@ -1,15 +1,6 @@
-# Use the official Ubuntu 24.04 image as the base
 FROM archlinux:latest
 
-# Set the maintainer information
-# MAINTAINER Jai
-
-# docker rm $(docker ps -aq)
-# docker stop kclient && docker rm kclient && docker buildx build -t kclient:v1 .
-# docker run -dit --net=krb5 --name kclient --hostname kclient.jai.net kclient:v1 /bin/bash
-### docker attach kclient
-### docker exec kclient nohup /usr/bin/sshd -D && docker exec kclient ps -ef
-# docker exec kclient /setup-service.sh
+LABEL group="arch-krb5"
 
 RUN pacman -Sy --noconfirm krb5 openssh vi
 
@@ -19,52 +10,3 @@ COPY sshd_config /etc/ssh/sshd_config
 COPY k5login /root/.k5login
 
 COPY setup-service.sh /setup-service.sh
-# CMD [ "/setup-service.sh" ]
-
-# RUN mkdir /var/krb5kdc
-
-### kadmin
-### addprinc -randkey host/kclient.jai.net
-### ktadd host/kclient.jai.net
-# kadmin -w jai -q 'addprinc -randkey host/kclient.jai.net'
-# kadmin -w jai -q 'ktadd host/kclient.jai.net'
-# /usr/bin/ssh-keygen -A
-# nohup /usr/bin/sshd -D -E /var/sshd.log &
-
-# ssh -v kssh.jai.net
-
-
-
-# [root@kclient /]# cat /usr/lib/systemd/system/sshd.service
-# [Unit]
-# Description=OpenSSH Daemon
-# Wants=sshdgenkeys.service
-# After=sshdgenkeys.service
-# After=network.target
-
-# [Service]
-# Type=notify-reload
-# ExecStart=/usr/bin/sshd -D
-# KillMode=process
-# Restart=always
-
-# [Install]
-# WantedBy=multi-user.target
-
-
-# [root@kclient /]# cat /usr/lib/systemd/system/sshdgenkeys.service
-# [Unit]
-# Description=SSH Key Generation
-# ConditionPathExists=|!/etc/ssh/ssh_host_ecdsa_key
-# ConditionPathExists=|!/etc/ssh/ssh_host_ecdsa_key.pub
-# ConditionPathExists=|!/etc/ssh/ssh_host_ed25519_key
-# ConditionPathExists=|!/etc/ssh/ssh_host_ed25519_key.pub
-# ConditionPathExists=|!/etc/ssh/ssh_host_rsa_key
-# ConditionPathExists=|!/etc/ssh/ssh_host_rsa_key.pub
-
-# [Service]
-# ExecStart=/usr/bin/ssh-keygen -A
-# Type=oneshot
-
-# [Install]
-# WantedBy=multi-user.target
