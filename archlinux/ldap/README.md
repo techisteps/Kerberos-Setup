@@ -69,7 +69,7 @@ nohup /usr/lib/slapd -d 0 -u ldap -g ldap -h "ldaps:///" &
 References:  
 [LDAP authentication](https://wiki.archlinux.org/title/LDAP_authentication)  
 [OpenLDAP](https://wiki.archlinux.org/title/OpenLDAP)  
-
+[nss-pam-ldapd](https://arthurdejong.org/nss-pam-ldapd/docs)
 
 
 
